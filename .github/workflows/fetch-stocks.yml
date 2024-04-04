@@ -55,8 +55,15 @@ jobs:
       - name: make-krx-directory
         run: mkdir -p $GITHUB_WORKSPACE/krx
       - name: get-krx
-        run: "curl --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0) Gecko/20100101 Firefox/85.0' http://kind.krx.co.kr/corpgeneral/corpList.do\\?currentPageSize\\=5000\\&pageIndex\\=1\\&method\\=download\\&searchType\\=13\\&marketType\\=stockMkt > /tmp/krx.json"
-
+        id: myRequest
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "http://kind.krx.co.kr/corpgeneral/corpList.do?currentPageSize=5000&pageIndex=1&method=download"
+      - name: Show Response
+        run: |
+          echo ${{ steps.myRequest.outputs.response }}
+          echo ${{ steps.myRequest.outputs.headers }}
+          echo ${{ fromJson(steps.myRequest.outputs.response).field_you_want_to_access }}
       # Concat all Data
       - name: make-all-directory
         run: mkdir -p $GITHUB_WORKSPACE/all
