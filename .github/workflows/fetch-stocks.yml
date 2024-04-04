@@ -72,5 +72,5 @@ jobs:
           aws-region: 'ap-east-1'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           destination-dir: 'symbols'
-          file-path: $GITHUB_WORKSPACE/all/all_tickers.txt
+          file-path: ./all/all_tickers.txt
         
