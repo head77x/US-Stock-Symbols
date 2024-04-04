@@ -56,9 +56,12 @@ jobs:
         run: mkdir -p $GITHUB_WORKSPACE/krx
       - name: get-krx
         id: myRequest
-        uses: fjogeleit/http-request-action@v1
+        uses: cygnetdigital/wait_for_response@v2.0.0
         with:
           url: "http://kind.krx.co.kr/corpgeneral/corpList.do?currentPageSize=5000&pageIndex=1&method=download"
+          responseCode: '200,500'
+          timeout: 60000
+          interval: 500
       - name: Show Response
         run: |
           echo ${{ steps.myRequest.outputs.response }}
