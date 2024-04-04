@@ -57,13 +57,6 @@ jobs:
         run: cat $GITHUB_WORKSPACE/amex/amex_tickers.txt $GITHUB_WORKSPACE/nyse/nyse_tickers.txt $GITHUB_WORKSPACE/nasdaq/nasdaq_tickers.txt > /tmp/all_tickers.txt
       - name: head
         run: cat /tmp/all_tickers.txt | sort -u | uniq > $GITHUB_WORKSPACE/all/all_tickers.txt
-      - name: commit-new-files
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "generated"
-          git push
       - name: Upload to S3
         uses: hkusu/s3-upload-action@v2
         with:
@@ -73,4 +66,11 @@ jobs:
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           destination-dir: 'symbols'
           file-path: './all/all_tickers.txt'
+      - name: commit-new-files
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git push
         
