@@ -55,10 +55,10 @@ jobs:
       - name: make-krx-directory
         run: mkdir -p $GITHUB_WORKSPACE/krx
       - name: get-krx
-        run: "curl -o /tmp/krx.html --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0) Gecko/20100101 Firefox/85.0' http://kind.krx.co.kr/corpgeneral/corpList.do\\?currentPageSize\\=5000\\&pageIndex\\=1\\&method\\=download"
+        run: "curl -o /tmp/krx.html http://kind.krx.co.kr/corpgeneral/corpList.do\\?currentPageSize\\=5000\\&pageIndex\\=1\\&method\\=download"
       - name: Show Response
         run: |
-          echo /tmp/krx.html
+          cat /tmp/krx.html
       # Concat all Data
       - name: make-all-directory
         run: mkdir -p $GITHUB_WORKSPACE/all
