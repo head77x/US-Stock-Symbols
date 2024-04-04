@@ -60,8 +60,7 @@ jobs:
         with:
           url: "http://kind.krx.co.kr/corpgeneral/corpList.do?currentPageSize=5000&pageIndex=1&method=download"
       - name: Show Response
-        run: |
-          echo ${{ fromJson(steps.myRequest.outputs.response) }}
+        run: "cat ${{ fromJson(steps.myRequest.outputs.response) }} > /tmp/krx.html"
       # Concat all Data
       - name: make-all-directory
         run: mkdir -p $GITHUB_WORKSPACE/all
@@ -114,5 +113,5 @@ jobs:
           aws-region: 'ap-east-1'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           destination-dir: 'symbols'
-          file-path: '/tmp/krx.json'
+          file-path: '/tmp/krx.html'
   
