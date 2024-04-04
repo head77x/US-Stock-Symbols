@@ -23,6 +23,8 @@ jobs:
         run: "curl --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0) Gecko/20100101 Firefox/85.0' https://api.nasdaq.com/api/screener/stocks\\?tableonly\\=true\\&limit\\=25\\&offset\\=0\\&exchange\\=nasdaq\\&download\\=true > /tmp/nasdaq.json"
       - name: gen-nasdaq-stock-tickers-json
         run: "cat /tmp/nasdaq.json | jq '.data.rows' > $GITHUB_WORKSPACE/nasdaq/nasdaq_full_tickers.json"
+      - name: gen-full-nasdaq-stock-tickers-json
+        run: "cat /tmp/nasdaq.json | jq '.data.rows' > /tmp/full_tickers.json"
       - name: gen-nasdaq-stock-tickers-json
         run: "cat /tmp/nasdaq.json | jq '[.data.rows | .[] | .symbol]' > $GITHUB_WORKSPACE/nasdaq/nasdaq_tickers.json"
       - name: gen-nasdaq-stock-tickers-txt
@@ -35,6 +37,8 @@ jobs:
         run: "curl --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0) Gecko/20100101 Firefox/85.0' https://api.nasdaq.com/api/screener/stocks\\?tableonly\\=true\\&limit\\=25\\&offset\\=0\\&exchange\\=nyse\\&download\\=true > /tmp/nyse.json"
       - name: gen-nyse-stock-tickers-json
         run: "cat /tmp/nyse.json | jq '.data.rows' > $GITHUB_WORKSPACE/nyse/nyse_full_tickers.json"
+      - name: gen-full-nyse-stock-tickers-json
+        run: "cat /tmp/nyse.json | jq '.data.rows' > /tmp/full_tickers.json"
       - name: gen-nyse-stock-tickers-json
         run: "cat /tmp/nyse.json | jq '[.data.rows | .[] | .symbol]' > $GITHUB_WORKSPACE/nyse/nyse_tickers.json"
       - name: gen-nyse-stock-tickers-txt
@@ -46,6 +50,8 @@ jobs:
         run: "curl --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0) Gecko/20100101 Firefox/85.0' https://api.nasdaq.com/api/screener/stocks\\?tableonly\\=true\\&limit\\=25\\&offset\\=0\\&exchange\\=amex\\&download\\=true > /tmp/amex.json"
       - name: gen-amex-stock-tickers-json
         run: "cat /tmp/amex.json | jq '.data.rows' > $GITHUB_WORKSPACE/amex/amex_full_tickers.json"
+      - name: gen-full-amex-stock-tickers-json
+        run: "cat /tmp/amex.json | jq '.data.rows' > /tmp/full_tickers.json"
       - name: gen-amex-stock-tickers-json
         run: "cat /tmp/amex.json | jq '[.data.rows | .[] | .symbol]' > $GITHUB_WORKSPACE/amex/amex_tickers.json"
       - name: gen-amex-stock-tickers-txt
@@ -65,12 +71,5 @@ jobs:
           aws-region: 'ap-east-1'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           destination-dir: 'symbols'
-          file-path: './all/all_tickers.txt'
-      - name: commit-new-files
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "generated"
-          git push
+          file-path: '/tmp/full_tickers.json'
         
