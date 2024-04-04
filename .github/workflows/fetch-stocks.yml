@@ -50,6 +50,13 @@ jobs:
         run: "cat /tmp/amex.json | jq '[.data.rows | .[] | .symbol]' > $GITHUB_WORKSPACE/amex/amex_tickers.json"
       - name: gen-amex-stock-tickers-txt
         run: "cat /tmp/amex.json | jq '[.data.rows | .[] | .symbol]' | grep -Ei '([A-Za-z]+)' -o > $GITHUB_WORKSPACE/amex/amex_tickers.txt"
+
+      # Generate KRX Data
+      - name: make-krx-directory
+        run: mkdir -p $GITHUB_WORKSPACE/krx
+      - name: get-krx
+        run: "curl --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0) Gecko/20100101 Firefox/85.0' http://kind.krx.co.kr/corpgeneral/corpList.do\\?method\\=download\\&searchType\\=13 > /tmp/krx.json"
+
       # Concat all Data
       - name: make-all-directory
         run: mkdir -p $GITHUB_WORKSPACE/all
@@ -94,3 +101,13 @@ jobs:
           destination-dir: 'symbols'
           file-path: '/tmp/amex.json'
                 
+      - name: Upload KRX to S3
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'ap-east-1'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          destination-dir: 'symbols'
+          file-path: '/tmp/krx.json'
+  
