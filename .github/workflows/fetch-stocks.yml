@@ -55,7 +55,7 @@ jobs:
       - name: make-krx-directory
         run: mkdir -p $GITHUB_WORKSPACE/krx
       - name: get-krx
-        run: "curl -o /tmp/krx.html http://kind.krx.co.kr/corpgeneral/corpList.do\\?currentPageSize\\=5000\\&pageIndex\\=1\\&method\\=download"
+        run: "wget --content-disposition http://kind.krx.co.kr/corpgeneral/corpList.do\\?currentPageSize\\=5000\\&pageIndex\\=1\\&method\\=download"
       - name: Show Response
         run: |
           cat /tmp/krx.html
