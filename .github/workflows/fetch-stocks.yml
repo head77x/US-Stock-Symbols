@@ -60,7 +60,9 @@ jobs:
         with:
           url: "http://kind.krx.co.kr/corpgeneral/corpList.do?currentPageSize=5000&pageIndex=1&method=download"
       - name: Show Response
-        run: echo ${{ fromJson(steps.myRequest.outputs.response) }} > $GITHUB_WORKSPACE/krx/krx.html
+        run: |
+          echo ${{ steps.myRequest.outputs.headers }}
+          echo ${{ fromJson(steps.myRequest.outputs.response.content) }} > $GITHUB_WORKSPACE/krx/krx.html
       # Concat all Data
       - name: make-all-directory
         run: mkdir -p $GITHUB_WORKSPACE/all
