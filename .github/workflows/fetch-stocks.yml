@@ -58,12 +58,6 @@ jobs:
         run: "wget --content-disposition http://kind.krx.co.kr/corpgeneral/corpList.do\\?currentPageSize\\=5000\\&pageIndex\\=1\\&method\\=download -O /tmp/krxtemp.html"
       - name: convert-krx
         run: "iconv -f euc-kr -t utf-8 /tmp/krxtemp.html > /tmp/krx.html"  
-      - name: extract-info
-        run: |
-          xmllint --html --xpath '//div[@class="bbs_tb"]/table/tr/td/text()' /tmp/krx.html | perl -0777 -pe 's/:\s+/: /g; s/^\s+//mg'
-      - name: Show Response
-        run: |
-          cat /tmp/krx.html
       # Concat all Data
       - name: make-all-directory
         run: mkdir -p $GITHUB_WORKSPACE/all
@@ -107,7 +101,6 @@ jobs:
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           destination-dir: 'symbols'
           file-path: '/tmp/amex.json'
-                
       - name: Upload KRX to S3
         uses: hkusu/s3-upload-action@v2
         with:
