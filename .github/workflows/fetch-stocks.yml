@@ -55,18 +55,10 @@ jobs:
       - name: make-krx-directory
         run: mkdir -p $GITHUB_WORKSPACE/krx
       - name: get-krx
-        id: myRequest
-        uses: cygnetdigital/wait_for_response@v2.0.0
-        with:
-          url: "http://kind.krx.co.kr/corpgeneral/corpList.do?currentPageSize=5000&pageIndex=1&method=download"
-          responseCode: '200,500'
-          timeout: 60000
-          interval: 500
+        run: "curl -o /tmp/krx.html --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0) Gecko/20100101 Firefox/85.0' http://kind.krx.co.kr/corpgeneral/corpList.do\\?currentPageSize\\=5000\\&pageIndex\\=1\\&method\\=download"
       - name: Show Response
         run: |
-          echo ${{ steps.myRequest.outputs.response }}
-          echo ${{ steps.myRequest.outputs.headers }}
-          echo ${{ fromJson(steps.myRequest.outputs.response).field_you_want_to_access }}
+          echo /tmp/krx.html
       # Concat all Data
       - name: make-all-directory
         run: mkdir -p $GITHUB_WORKSPACE/all
